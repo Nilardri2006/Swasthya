@@ -1,943 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HealAi - Your Medical Claims Assistant</title>
+    <title>सWASTHYA - Your Medical Claims Assistant</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <style>
-        :root {
-            --primary: #00d4aa;
-            --secondary: #00b894;
-            --accent: #00a085;
-            --light: #1a2332;
-            --dark: #0d1117;
-            --darker: #010409;
-            --white: #f0f6fc;
-            --gray: #161b22;
-            --text: #e6edf3;
-            --text-muted: #8b949e;
-            --border: #30363d;
-            --card-bg: #21262d;
-            --hover-bg: #30363d;
-            --success: #238636;
-            --warning: #d29922;
-            --error: #da3633;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background-color: var(--dark);
-            color: var(--text);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-        
-        .container {
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 15px;
-        }
-        
-        /* Header Styles */
-        header {
-            background: linear-gradient(135deg, var(--dark) 0%, var(--gray) 100%);
-            color: var(--white);
-            padding: 1rem 0;
-            box-shadow: 0 2px 20px rgba(0, 212, 170, 0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--border);
-        }
-        
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--primary);
-        }
-        
-        .logo i {
-            font-size: 28px;
-            color: var(--primary);
-            filter: drop-shadow(0 0 10px rgba(0, 212, 170, 0.5));
-        }
-        
-        nav ul {
-            display: flex;
-            list-style: none;
-            gap: 20px;
-        }
-        
-        nav a {
-            color: var(--text);
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            padding: 8px 12px;
-            border-radius: 6px;
-            position: relative;
-        }
-        
-        nav a:hover {
-            background-color: var(--hover-bg);
-            color: var(--primary);
-            transform: translateY(-2px);
-        }
-        
-        nav a::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            width: 0;
-            height: 2px;
-            background: var(--primary);
-            transition: all 0.3s ease;
-            transform: translateX(-50%);
-        }
-        
-        nav a:hover::after {
-            width: 80%;
-        }
-        
-        .auth-buttons {
-            display: flex;
-            gap: 10px;
-        }
-        
-        .btn {
-            padding: 10px 20px;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-            transition: left 0.5s;
-        }
-        
-        .btn:hover::before {
-            left: 100%;
-        }
-        
-        .btn-outline {
-            background: transparent;
-            border: 2px solid var(--primary);
-            color: var(--primary);
-        }
-        
-        .btn-outline:hover {
-            background-color: var(--primary);
-            color: var(--dark);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 212, 170, 0.3);
-        }
-        
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            color: var(--dark);
-            border: 2px solid transparent;
-        }
-        
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 212, 170, 0.4);
-            filter: brightness(1.1);
-        }
-        
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(135deg, var(--dark) 0%, var(--gray) 50%, var(--dark) 100%);
-            color: var(--white);
-            padding: 6rem 0;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
-                radial-gradient(circle at 20% 80%, rgba(0, 212, 170, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(0, 184, 148, 0.1) 0%, transparent 50%);
-            pointer-events: none;
-        }
-        
-        .hero-content {
-            max-width: 800px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 2;
-        }
-        
-        .hero h1 {
-            font-size: 3rem;
-            margin-bottom: 1.5rem;
-            background: linear-gradient(135deg, var(--white) 0%, var(--primary) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            line-height: 1.2;
-        }
-        
-        .hero p {
-            font-size: 1.3rem;
-            margin-bottom: 3rem;
-            color: var(--text-muted);
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        
-        .cta-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-bottom: 3rem;
-            flex-wrap: wrap;
-        }
-        
-        .btn-large {
-            padding: 15px 30px;
-            font-size: 1.1rem;
-            border-radius: 12px;
-        }
-        
-        /* 3D Canvas Container */
-        .canvas-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
-        }
-        
-        /* Features Section */
-        .features {
-            padding: 6rem 0;
-            background: var(--gray);
-            position: relative;
-        }
-        
-        .section-title {
-            text-align: center;
-            margin-bottom: 4rem;
-        }
-        
-        .section-title h2 {
-            font-size: 2.5rem;
-            color: var(--primary);
-            margin-bottom: 1rem;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        .section-title p {
-            color: var(--text-muted);
-            max-width: 700px;
-            margin: 0 auto;
-            font-size: 1.1rem;
-        }
-        
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 30px;
-        }
-        
-        .feature-card {
-            background: var(--card-bg);
-            border-radius: 16px;
-            padding: 30px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            transition: all 0.4s ease;
-            border: 1px solid var(--border);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .feature-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-        }
-        
-        .feature-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(0, 212, 170, 0.2);
-            border-color: var(--primary);
-        }
-        
-        .feature-icon {
-            width: 70px;
-            height: 70px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            color: var(--dark);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 16px;
-            font-size: 28px;
-            margin-bottom: 25px;
-            box-shadow: 0 8px 20px rgba(0, 212, 170, 0.3);
-        }
-        
-        .feature-card h3 {
-            color: var(--white);
-            margin-bottom: 15px;
-            font-size: 1.3rem;
-        }
-        
-        .feature-card p {
-            color: var(--text-muted);
-            margin-bottom: 20px;
-            line-height: 1.6;
-        }
-        
-        .feature-link {
-            color: var(--primary);
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-        
-        .feature-link:hover {
-            color: var(--secondary);
-            transform: translateX(5px);
-        }
-        
-        /* How It Works */
-        .how-it-works {
-            padding: 6rem 0;
-            background: var(--dark);
-            position: relative;
-        }
-        
-        .steps {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            margin-top: 4rem;
-            gap: 30px;
-        }
-        
-        .step {
-            flex: 1;
-            min-width: 250px;
-            text-align: center;
-            padding: 30px 20px;
-            margin-bottom: 30px;
-            position: relative;
-            background: var(--card-bg);
-            border-radius: 16px;
-            border: 1px solid var(--border);
-            transition: all 0.3s ease;
-        }
-        
-        .step:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0, 212, 170, 0.1);
-        }
-        
-        .step-number {
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            color: var(--dark);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 1.2rem;
-            margin: 0 auto 20px;
-            box-shadow: 0 8px 20px rgba(0, 212, 170, 0.3);
-        }
-        
-        .step h3 {
-            margin-bottom: 15px;
-            color: var(--white);
-            font-size: 1.2rem;
-        }
-        
-        .step p {
-            color: var(--text-muted);
-            line-height: 1.6;
-        }
-        
-        /* Chatbot */
-        .chatbot-container {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 1000;
-        }
-        
-        .chatbot-button {
-            width: 65px;
-            height: 65px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            color: var(--dark);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 26px;
-            cursor: pointer;
-            box-shadow: 0 8px 25px rgba(0, 212, 170, 0.4);
-            transition: all 0.3s ease;
-            border: 3px solid var(--dark);
-        }
-        
-        .chatbot-button:hover {
-            transform: scale(1.1);
-            box-shadow: 0 12px 35px rgba(0, 212, 170, 0.6);
-        }
-        
-        .chatbot-window {
-            position: absolute;
-            bottom: 85px;
-            right: 0;
-            width: 380px;
-            height: 550px;
-            background: var(--card-bg);
-            border-radius: 16px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-            display: none;
-            flex-direction: column;
-            overflow: hidden;
-            border: 1px solid var(--border);
-        }
-        
-        .chatbot-header {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            color: var(--dark);
-            padding: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        
-        .chatbot-title {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-weight: 700;
-            font-size: 1.1rem;
-        }
-        
-        .close-chat {
-            background: none;
-            border: none;
-            color: var(--dark);
-            cursor: pointer;
-            font-size: 20px;
-            padding: 5px;
-            border-radius: 50%;
-            transition: all 0.3s ease;
-        }
-        
-        .close-chat:hover {
-            background: rgba(0, 0, 0, 0.1);
-        }
-        
-        .chat-messages {
-            flex: 1;
-            padding: 20px;
-            overflow-y: auto;
-            background: var(--gray);
-        }
-        
-        .message {
-            margin-bottom: 15px;
-            max-width: 85%;
-        }
-        
-        .bot-message {
-            background: var(--card-bg);
-            padding: 12px 16px;
-            border-radius: 16px 16px 16px 4px;
-            align-self: flex-start;
-            color: var(--text);
-            border: 1px solid var(--border);
-        }
-        
-        .user-message {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            color: var(--dark);
-            padding: 12px 16px;
-            border-radius: 16px 16px 4px 16px;
-            margin-left: auto;
-            font-weight: 500;
-        }
-        
-        .chat-input {
-            display: flex;
-            padding: 15px;
-            border-top: 1px solid var(--border);
-            background: var(--card-bg);
-            gap: 10px;
-        }
-        
-        .chat-input input {
-            flex: 1;
-            padding: 12px 16px;
-            border: 1px solid var(--border);
-            border-radius: 25px;
-            outline: none;
-            background: var(--gray);
-            color: var(--text);
-            font-size: 14px;
-        }
-        
-        .chat-input input:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(0, 212, 170, 0.1);
-        }
-        
-        .send-message {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            color: var(--dark);
-            border: none;
-            border-radius: 50%;
-            width: 45px;
-            height: 45px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-        }
-        
-        .send-message:hover {
-            transform: scale(1.1);
-            box-shadow: 0 5px 15px rgba(0, 212, 170, 0.3);
-        }
-        
-        /* Dashboard Preview */
-        .dashboard-preview {
-            padding: 6rem 0;
-            background: var(--gray);
-        }
-        
-        .dashboard-image {
-            text-align: center;
-            margin-top: 3rem;
-        }
-        
-        .dashboard-image img {
-            max-width: 100%;
-            border-radius: 16px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            border: 1px solid var(--border);
-        }
-        
-        /* Testimonials */
-        .testimonials {
-            padding: 6rem 0;
-            background: var(--dark);
-            position: relative;
-        }
-        
-        .testimonial-container {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-        
-        .testimonial-card {
-            background: var(--card-bg);
-            padding: 40px;
-            border-radius: 16px;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
-            margin-bottom: 30px;
-            border: 1px solid var(--border);
-            position: relative;
-        }
-        
-        .testimonial-card::before {
-            content: '"';
-            position: absolute;
-            top: -10px;
-            left: 30px;
-            font-size: 4rem;
-            color: var(--primary);
-            font-family: serif;
-        }
-        
-        .testimonial-content {
-            font-style: italic;
-            margin-bottom: 25px;
-            color: var(--text);
-            font-size: 1.1rem;
-            line-height: 1.7;
-        }
-        
-        .testimonial-author {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-        
-        .author-avatar {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--dark);
-            font-weight: bold;
-            font-size: 1.2rem;
-        }
-        
-        .author-info h4 {
-            margin-bottom: 5px;
-            color: var(--white);
-        }
-        
-        .author-info p {
-            color: var(--text-muted);
-            font-size: 14px;
-        }
-        
-        /* CTA Section */
-        .cta-section {
-            padding: 6rem 0;
-            background: linear-gradient(135deg, var(--dark) 0%, var(--primary) 100%);
-            color: var(--white);
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .cta-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
-                radial-gradient(circle at 30% 70%, rgba(0, 184, 148, 0.2) 0%, transparent 50%),
-                radial-gradient(circle at 70% 30%, rgba(0, 212, 170, 0.2) 0%, transparent 50%);
-            pointer-events: none;
-        }
-        
-        .cta-content {
-            max-width: 700px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 2;
-        }
-        
-        .cta-content h2 {
-            font-size: 2.5rem;
-            margin-bottom: 1.5rem;
-            color: var(--white);
-        }
-        
-        .cta-content p {
-            margin-bottom: 2.5rem;
-            font-size: 1.2rem;
-            color: rgba(255, 255, 255, 0.9);
-        }
-        
-        /* Footer */
-        footer {
-            background: var(--darker);
-            color: var(--text);
-            padding: 4rem 0 2rem;
-            border-top: 1px solid var(--border);
-        }
-        
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 40px;
-            margin-bottom: 3rem;
-        }
-        
-        .footer-column h3 {
-            margin-bottom: 1.5rem;
-            font-size: 1.2rem;
-            color: var(--primary);
-        }
-        
-        .footer-column ul {
-            list-style: none;
-        }
-        
-        .footer-column ul li {
-            margin-bottom: 12px;
-        }
-        
-        .footer-column a {
-            color: var(--text-muted);
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-        
-        .footer-column a:hover {
-            color: var(--primary);
-            transform: translateX(5px);
-        }
-        
-        .social-links {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
-        }
-        
-        .social-links a {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background: var(--card-bg);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            border: 1px solid var(--border);
-        }
-        
-        .social-links a:hover {
-            background: var(--primary);
-            color: var(--dark);
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 212, 170, 0.3);
-        }
-        
-        .footer-bottom {
-            text-align: center;
-            padding-top: 2rem;
-            border-top: 1px solid var(--border);
-            font-size: 14px;
-            color: var(--text-muted);
-        }
-        
-        /* Floating Medical Elements */
-        .floating-medical {
-            position: absolute;
-            pointer-events: none;
-            opacity: 0.1;
-            animation: float 6s ease-in-out infinite;
-        }
-        
-        .floating-pill {
-            width: 20px;
-            height: 20px;
-            background: var(--primary);
-            border-radius: 50%;
-            animation: float 4s ease-in-out infinite;
-        }
-        
-        .floating-cross {
-            color: var(--primary);
-            font-size: 24px;
-            animation: float 5s ease-in-out infinite;
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(180deg); }
-        }
-        
-        /* Enhanced Animations */
-        .feature-card, .step, .testimonial-card {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.6s ease;
-        }
-        
-        .animate-in {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        
-        /* Term highlights and quick replies */
-        .term-highlight {
-            color: var(--primary);
-            text-decoration: underline;
-            cursor: help;
-            font-weight: 600;
-        }
-        
-        .quick-replies {
-            display: flex;
-            gap: 10px;
-            margin: 15px 0 15px auto;
-            max-width: 85%;
-            flex-wrap: wrap;
-        }
-        
-        .quick-replies button {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            color: var(--dark);
-            border: none;
-            border-radius: 20px;
-            padding: 10px 16px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-        
-        .quick-replies button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 212, 170, 0.3);
-        }
-        
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .header-content {
-                flex-direction: column;
-                gap: 20px;
-            }
-            
-            nav ul {
-                flex-direction: column;
-                align-items: center;
-                gap: 15px;
-            }
-            
-            .hero h1 {
-                font-size: 2.2rem;
-            }
-            
-            .hero p {
-                font-size: 1.1rem;
-            }
-            
-            .steps {
-                flex-direction: column;
-            }
-            
-            .step {
-                margin-bottom: 30px;
-            }
-            
-            .cta-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .features-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .chatbot-window {
-                width: 320px;
-                height: 480px;
-            }
-            
-            .section-title h2 {
-                font-size: 2rem;
-            }
-            
-            .cta-content h2 {
-                font-size: 2rem;
-            }
-        }
-        
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        
-        ::-webkit-scrollbar-track {
-            background: var(--gray);
-        }
-        
-        ::-webkit-scrollbar-thumb {
-            background: var(--primary);
-            border-radius: 4px;
-        }
-        
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--secondary);
-        }
-        
-        /* Link styles */
-        #upload-new-doc, #loggggg, #signnnnn, #getttt {
-            text-decoration: none;
-        }
-        
-        /* Loading animation */
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid var(--border);
-            border-radius: 50%;
-            border-top-color: var(--primary);
-            animation: spin 1s ease-in-out infinite;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-    </style>
+    <link rel=" stylesheet" href="index.css">
+
 </head>
+
 <body>
     <!-- Header -->
     <header>
         <div class="container header-content">
             <div class="logo">
-                <i class="fas fa-heartbeat"></i>
-                <span>HealAi</span>
+
+                <a href="index.html">
+                    <img src="swasthyalogoreal.png" alt="Swasthya Logo" style="height: 80px;">
+                </a>
             </div>
-            
+
             <nav>
                 <ul>
                     <li><a href="#features">Features</a></li>
@@ -946,7 +31,10 @@
                     <li><a href="#contact">Contact</a></li>
                 </ul>
             </nav>
-            
+            <button id="themeToggle" aria-label="Toggle theme">
+                <span id="themeIcon">🌙</span>
+            </button>
+
             <div class="auth-buttons">
                 <a href="login.html" id="loggggg" class="btn btn-outline">
                     <i class="fas fa-sign-in-alt"></i>
@@ -959,25 +47,47 @@
             </div>
         </div>
     </header>
-    
+
     <!-- Hero Section -->
     <section class="hero">
         <div class="canvas-container" id="hero-canvas"></div>
         <div class="container hero-content">
-            <h1>Simplifying Medical Claims Processing</h1>
-            <p>HealAi uses advanced AI to help patients navigate the complex world of medical insurance claims, making the process faster and more transparent.</p>
-            
-            <div class="cta-buttons">
-                <a href="upload2.html" id="upload-new-doc" class="btn btn-primary btn-large">
-                    <i class="fas fa-upload"></i>
-                    Upload New Document
-                </a>
-                <button class="btn btn-outline btn-large">
-                    <i class="fas fa-chart-line"></i>
-                    View My Claims
-                </button>
+            <div class="side">
+                <div class="circle">
+                    <div class="animated-text" style="text-align:center;justify-content: center;">
+
+
+
+                        <div class="name">
+                            <p class="animated-text" style="font-size:6rem; font-weight:bold; color:#88909b;">
+                                <span id="changing-letter"
+                                    style="color:#00b894; font-size:7.5rem;">S</span>wasthya
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <div clas="ins">
+
+                    <h1> Insurance Advisor </h1>
+
+                    <p> सWASTHYA's AI Insurance Advisor offers instant, personalized health insurance guidance powered
+                        by
+                        advanced artificial intelligence.</p>
+
+                    <div class="cta-buttons">
+
+                        <a href="https://1dddc6bf-5dce-4d20-961a-b5d8e4910e4d-00-3vt4om1k2glju.picard.replit.dev/"
+                            class="btn btn-primary btn-large">
+                            <i class="fas fa-upload"></i>
+                            Get Advice
+                        </a>
+
+                    </div>
+                </div>
             </div>
-            
             <!-- Floating medical elements -->
             <div class="floating-medical" style="top: 20%; left: 10%; animation-delay: 0s;">
                 <i class="fas fa-pills floating-cross"></i>
@@ -990,78 +100,89 @@
             </div>
         </div>
     </section>
-    
+
     <!-- Features Section -->
     <section id="features" class="features">
         <div class="canvas-container" id="features-canvas"></div>
         <div class="container">
             <div class="section-title">
                 <h2>Our Core Features</h2>
-                <p>HealAi provides powerful tools to simplify your medical claims experience</p>
+                <p>सWASTHYA provides powerful tools to simplify your medical claims experience</p>
             </div>
-            
+
             <div class="features-grid">
                 <div class="feature-card">
                     <div class="feature-icon">
                         <i class="fas fa-file-alt"></i>
                     </div>
                     <h3>Document Summarization</h3>
-                    <p>Extracts and summarizes lengthy medical reports into short, understandable summaries that highlight the most important information.</p>
-                    <a href="https://70227535-564b-451f-b9c9-20b02677224b-00-sbmutj36mg19.janeway.replit.dev/" class="feature-link">
+                    <p>Extracts and summarizes lengthy medical reports into short, understandable summaries that
+                        highlight the most important information.</p>
+                    <a href="https://70227535-564b-451f-b9c9-20b02677224b-00-sbmutj36mg19.janeway.replit.dev/"
+                        class="feature-link">
                         Try Now <i class="fas fa-arrow-right"></i>
                     </a>
                 </div>
-                
+
                 <div class="feature-card">
                     <div class="feature-icon">
                         <i class="fas fa-book"></i>
                     </div>
-                    <h3>Insurance Advisor</h3>
-                    <p>AI Insurance Advisor offers instant, personalized health insurance guidance powered by advanced artificial intelligence.</p>
-                    <a href="https://1dddc6bf-5dce-4d20-961a-b5d8e4910e4d-00-3vt4om1k2glju.picard.replit.dev/" class="feature-link">
-                        Get Advice <i class="fas fa-arrow-right"></i>
+
+
+                    <h3>Easy Medical Claims</h3>
+                    <p> सWASTHYA uses advanced AI to simplify medical insurance claims.
+                        Patients get faster, clearer results — just by uploading a document.</p>
+                    <a href="upload2.html" id="upload-new-doc" class="feature-link">
+                        <i class="fas fa-arrow-right"></i>
+                        Upload New Document
                     </a>
                 </div>
-                
+
                 <div class="feature-card">
                     <div class="feature-icon">
                         <i class="fas fa-file-invoice"></i>
                     </div>
                     <h3>Auto Document Generator</h3>
-                    <p>Automatically generates professional claim letters, emails, or appeals using patient data to save you time and effort.</p>
+                    <p>Automatically generates professional claim letters, emails, or appeals using patient data to save
+                        you time and effort.</p>
                     <a href="#" class="feature-link">
                         Generate <i class="fas fa-arrow-right"></i>
                     </a>
                 </div>
-                
+
                 <div class="feature-card">
                     <div class="feature-icon">
                         <i class="fas fa-robot"></i>
                     </div>
                     <h3>Patient Chatbot</h3>
-                    <p>AI chatbot that provides instant answers to questions regarding bills, documents, or the claim process using your stored data.</p>
-                    <a href="https://32914d44-db4c-415b-9a4f-95e1c18c7726-00-19kl312x90gq6.janeway.replit.dev/" class="feature-link">
+                    <p>AI chatbot that provides instant answers to questions regarding bills, documents, or the claim
+                        process using your stored data.</p>
+                    <a href="https://32914d44-db4c-415b-9a4f-95e1c18c7726-00-19kl312x90gq6.janeway.replit.dev/"
+                        class="feature-link">
                         Chat Now <i class="fas fa-arrow-right"></i>
                     </a>
                 </div>
-                
+
                 <div class="feature-card">
                     <div class="feature-icon">
                         <i class="fas fa-chart-line"></i>
                     </div>
                     <h3>Claims Dashboard</h3>
-                    <p>Track all your claims in one place with our intuitive dashboard showing statuses, timelines, and next steps.</p>
+                    <p>Track all your claims in one place with our intuitive dashboard showing statuses, timelines, and
+                        next steps.</p>
                     <a href="#" class="feature-link">
                         View Dashboard <i class="fas fa-arrow-right"></i>
                     </a>
                 </div>
-                
+
                 <div class="feature-card">
                     <div class="feature-icon">
                         <i class="fas fa-shield-alt"></i>
                     </div>
                     <h3>Secure Document Storage</h3>
-                    <p>Store all your medical documents and claims in one secure, HIPAA-compliant location with easy access whenever needed.</p>
+                    <p>Store all your medical documents and claims in one secure, HIPAA-compliant location with easy
+                        access whenever needed.</p>
                     <a href="#" class="feature-link">
                         Learn More <i class="fas fa-arrow-right"></i>
                     </a>
@@ -1069,119 +190,146 @@
             </div>
         </div>
     </section>
-    
+
     <!-- How It Works Section -->
     <section id="how-it-works" class="how-it-works">
         <div class="canvas-container" id="process-canvas"></div>
         <div class="container">
             <div class="section-title">
                 <h2>How It Works</h2>
-                <p>Getting started with HealAi is quick and easy</p>
+                <p>Getting started with सWASTHYA is quick and easy</p>
             </div>
-            
+
             <div class="steps">
                 <div class="step">
                     <div class="step-number">1</div>
                     <h3>Upload Documents</h3>
-                    <p>Upload your medical bills, insurance statements, and other relevant documents securely to our platform.</p>
+                    <p>Upload your medical bills, insurance statements, and other relevant documents securely to our
+                        platform.</p>
                 </div>
-                
+
                 <div class="step">
                     <div class="step-number">2</div>
                     <h3>AI Analysis</h3>
-                    <p>Our AI analyzes your documents, extracts important information, and prepares summaries and recommendations.</p>
+                    <p>Our AI analyzes your documents, extracts important information, and prepares summaries and
+                        recommendations.</p>
                 </div>
-                
+
                 <div class="step">
                     <div class="step-number">3</div>
                     <h3>Review & Submit</h3>
-                    <p>Review the AI-generated claim information, make any necessary adjustments, and submit your claim.</p>
+                    <p>Review the AI-generated claim information, make any necessary adjustments, and submit your claim.
+                    </p>
                 </div>
-                
+
                 <div class="step">
                     <div class="step-number">4</div>
                     <h3>Track Progress</h3>
-                    <p>Monitor your claim's progress in real-time through our intuitive dashboard and receive timely updates.</p>
+                    <p>Monitor your claim's progress in real-time through our intuitive dashboard and receive timely
+                        updates.</p>
                 </div>
             </div>
         </div>
     </section>
-    
+
     <!-- Dashboard Preview Section -->
     <section class="dashboard-preview">
         <div class="container">
             <div class="section-title">
                 <h2>Your Claims Dashboard</h2>
-                <p>Easily manage and track all your medical claims in one place</p>
+                <p>Effortlessly manage and track all your medical insurance claims in one unified dashboard.</p>
+
+                <button class="btn btn-outline btn-large" style="margin-top: 35px;">
+                    View My Claims
+                </button>
             </div>
-            
+
             <div class="dashboard-image">
                 <!-- Dashboard preview image would go here -->
             </div>
         </div>
     </section>
-    
+
     <!-- Testimonials Section -->
     <section id="testimonials" class="testimonials">
         <div class="canvas-container" id="testimonials-canvas"></div>
         <div class="container">
             <div class="section-title">
                 <h2>What Our Users Say</h2>
-                <p>Thousands of patients have simplified their medical claims process with HealAi</p>
+                <p>Thousands of patients have simplified their medical claims process with सWASTHYA</p>
             </div>
-            
+
             <div class="testimonial-container">
                 <div class="testimonial-card">
                     <div class="testimonial-content">
-                        <p>"HealAi saved me countless hours dealing with my insurance company. The document summarization feature helped me understand my policy coverage within minutes instead of hours."</p>
+                        <p>"सWASTHYA saved me countless hours dealing with my insurance company. The document
+                            summarization feature helped me understand my policy coverage within minutes instead of
+                            hours."</p>
                     </div>
                     <div class="testimonial-author">
-                        <div class="author-avatar">JS</div>
+                        <div class="author-avatar">PB</div>
                         <div class="author-info">
-                            <h4>Jennifer S.</h4>
-                            <p>Patient, Chicago</p>
+                            <h4>Pradip Biswas.</h4>
+                            <p>Patient, Garia</p>
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="testimonial-card">
                     <div class="testimonial-content">
-                        <p>"The chatbot feature is incredible! It answered all my questions about my claim status without having to wait on hold with my insurance provider. This tool is a game-changer."</p>
+                        <p>"The chatbot feature is incredible! It answered all my questions about my claim status
+                            without having to wait on hold with my insurance provider. This tool is a game-changer."</p>
                     </div>
                     <div class="testimonial-author">
-                        <div class="author-avatar">MD</div>
+                        <div class="author-avatar">AT</div>
                         <div class="author-info">
-                            <h4>Michael D.</h4>
-                            <p>Patient, Seattle</p>
+                            <h4>Aman Thakur</h4>
+                            <p>Patient, Newtown</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <p>"The chatbot made everything so easy! I got instant updates on my claim status—no waiting, no
+                            phone calls, just answers. Honestly, it’s like having a 24/7 support agent in my pocket."
+                        </p>
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">TD</div>
+                        <div class="author-info">
+                            <h4>Tiyasha De</h4>
+                            <p>Patient, NewAlipore</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    
+
     <!-- CTA Section -->
     <section class="cta-section">
         <div class="container cta-content">
             <h2>Ready to Simplify Your Medical Claims?</h2>
-            <p>Join thousands of users who have saved time and reduced stress with HealAi</p>
+            <p>Join thousands of users who have saved time and reduced stress with सWASTHYA </p>
             <a href="signup2.html" id="getttt" class="btn btn-primary btn-large">
                 <i class="fas fa-rocket"></i>
                 Get Started Now
             </a>
         </div>
     </section>
-    
+
     <!-- Footer -->
     <footer id="contact">
         <div class="container">
             <div class="footer-content">
                 <div class="footer-column">
                     <div class="logo">
-                        <i class="fas fa-heartbeat"></i>
-                        <span>HealAi</span>
+                        <img src="swasthyalogoreal.png" alt="Swasthya Logo" style="height: 150px;">
+
                     </div>
-                    <p style="margin-top: 15px;">Making medical claims processing simple, fast, and transparent with AI.</p>
+                    <p style="margin-top: 15px;">Making medical claims processing simple, fast, and transparent with AI.
+                    </p>
                     <div class="social-links">
                         <a href="#"><i class="fab fa-facebook-f"></i></a>
                         <a href="#"><i class="fab fa-twitter"></i></a>
@@ -1189,53 +337,50 @@
                         <a href="#"><i class="fab fa-instagram"></i></a>
                     </div>
                 </div>
-                
+
                 <div class="footer-column">
                     <h3>Features</h3>
                     <ul>
                         <li><a href="/document-summarization">Document Summarization</a></li>
-                        <li><a href="/term-explainer">Term Explainer</a></li>
-                        <li><a href="#">Auto Document Generator</a></li>
-                        <li><a href="#">Patient Chatbot</a></li>
-                        <li><a href="#">Claims Dashboard</a></li>
+                        <li><a href="/term-explainer">Easy Medical Claims</a></li>
+                        <li><a href="/Auto Document Generator">Auto Document Generator</a></li>
+                        <li><a href="/Patient Chatbot">Patient Chatbot</a></li>
+                        <li><a href="/Claims Dashboard">Claims Dashboard</a></li>
+                        <li><a href="/Secure Document Storage">Secure Document Storage</a></li>
                     </ul>
                 </div>
-                
+
                 <div class="footer-column">
                     <h3>Company</h3>
                     <ul>
-                        <li><a href="#">About Us</a></li>
-                        <li><a href="#">Our Team</a></li>
-                        <li><a href="#">Careers</a></li>
-                        <li><a href="#">Blog</a></li>
-                        <li><a href="#">Press</a></li>
+                        <li><a href="aboutus.html">About Us</a></li>
+                        <li><a href="ourteam.html">Our Team</a></li>
+
                     </ul>
                 </div>
-                
+
                 <div class="footer-column">
                     <h3>Support</h3>
                     <ul>
-                        <li><a href="#">Help Center</a></li>
-                        <li><a href="#">FAQ</a></li>
-                        <li><a href="#">Contact Us</a></li>
-                        <li><a href="#">Privacy Policy</a></li>
-                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="mailto:swasthya.help.2025@gmail.com">Contact Us</a></li>
+                        <li><a href="privacypolicy.html">Privacy Policy</a></li>
+                        <li><a href="terms.html">Terms of Service</a></li>
                     </ul>
                 </div>
             </div>
-            
+
             <div class="footer-bottom">
-                <p>&copy; 2025 HealAi. All rights reserved.</p>
+                <p>&copy; 2025 सWASTHYA . All rights reserved.</p>
             </div>
         </div>
     </footer>
-    
+
     <!-- Patient Chatbot -->
     <div class="chatbot-container">
         <div class="chatbot-button" id="chatbot-trigger">
             <i class="fas fa-comment-dots"></i>
         </div>
-        
+
         <div class="chatbot-window" id="chatbot-window">
             <div class="chatbot-header">
                 <div class="chatbot-title">
@@ -1246,13 +391,13 @@
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            
+
             <div class="chat-messages" id="chat-messages">
                 <div class="message bot-message">
-                    Hello! I'm your HealAi assistant. How can I help you with your medical claims today?
+                    Hello! I'm your सWASTHYA assistant. How can I help you with your medical claims today?
                 </div>
             </div>
-            
+
             <div class="chat-input">
                 <input type="text" placeholder="Type your question here..." id="chat-input-field">
                 <button class="send-message" id="send-message">
@@ -1261,9 +406,9 @@
             </div>
         </div>
     </div>
-    
+
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // Initialize all components
             initChatbot();
             initSmoothScrolling();
@@ -1271,6 +416,48 @@
             initFeatureLinks();
             init3DScenes();
         });
+
+
+        //theme
+        const toggleBtn = document.getElementById("themeToggle");
+        const icon = document.getElementById("themeIcon");
+
+        function updateIcon() {
+            const isLight = document.body.classList.contains("light-mode");
+            icon.textContent = isLight ? "🌙" : "🟡";
+        }
+
+        toggleBtn.addEventListener("click", () => {
+            document.body.classList.toggle("light-mode");
+
+            // Save preference
+            const isLight = document.body.classList.contains("light-mode");
+            localStorage.setItem("theme", isLight ? "light" : "dark");
+
+            updateIcon();
+        });
+
+        // Load saved theme
+        window.addEventListener("DOMContentLoaded", () => {
+            const savedTheme = localStorage.getItem("theme");
+            if (savedTheme === "light") {
+                document.body.classList.add("light-mode");
+            }
+            updateIcon();
+        });
+
+        //text changer
+
+        const letters = ['S', 'स', 'શ', 'স', 'ਸ', 'ସ', 'స', 'ச', 'ಸ', 'സ', 'ଽ', '𑀲', '𑂮'];
+
+        let index = 0;
+
+        setInterval(() => {
+            index = (index + 1) % letters.length;
+            document.getElementById("changing-letter").textContent = letters[index];
+        }, 800);
+
+
 
         // 3D Scene Initialization
         function init3DScenes() {
@@ -1293,7 +480,7 @@
             const scene = new THREE.Scene();
             const camera = new THREE.PerspectiveCamera(75, container.offsetWidth / container.offsetHeight, 0.1, 1000);
             const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-            
+
             renderer.setSize(container.offsetWidth, container.offsetHeight);
             renderer.setClearColor(0x000000, 0);
             container.appendChild(renderer.domElement);
@@ -1301,7 +488,7 @@
             // Lighting
             const ambientLight = new THREE.AmbientLight(0x00d4aa, 0.3);
             scene.add(ambientLight);
-            
+
             const pointLight = new THREE.PointLight(0x00d4aa, 1, 100);
             pointLight.position.set(10, 10, 10);
             scene.add(pointLight);
@@ -1310,10 +497,10 @@
             const medicalBills = [];
             for (let i = 0; i < 8; i++) {
                 const billGroup = new THREE.Group();
-                
+
                 // Bill background
                 const billGeometry = new THREE.PlaneGeometry(2, 2.8);
-                const billMaterial = new THREE.MeshPhongMaterial({ 
+                const billMaterial = new THREE.MeshPhongMaterial({
                     color: 0x21262d,
                     transparent: true,
                     opacity: 0.8
@@ -1357,10 +544,10 @@
             const bottles = [];
             for (let i = 0; i < 5; i++) {
                 const bottleGroup = new THREE.Group();
-                
+
                 // Bottle body
                 const bottleGeometry = new THREE.CylinderGeometry(0.3, 0.3, 1.5, 8);
-                const bottleMaterial = new THREE.MeshPhongMaterial({ 
+                const bottleMaterial = new THREE.MeshPhongMaterial({
                     color: 0x00b894,
                     transparent: true,
                     opacity: 0.7
@@ -1429,7 +616,7 @@
             const scene = new THREE.Scene();
             const camera = new THREE.PerspectiveCamera(75, container.offsetWidth / container.offsetHeight, 0.1, 1000);
             const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-            
+
             renderer.setSize(container.offsetWidth, container.offsetHeight);
             renderer.setClearColor(0x000000, 0);
             container.appendChild(renderer.domElement);
@@ -1442,11 +629,11 @@
             const pills = [];
             for (let i = 0; i < 15; i++) {
                 const pillGeometry = new THREE.SphereGeometry(0.1, 8, 6);
-                const pillMaterial = new THREE.MeshPhongMaterial({ 
+                const pillMaterial = new THREE.MeshPhongMaterial({
                     color: new THREE.Color().setHSL(Math.random(), 0.7, 0.6)
                 });
                 const pill = new THREE.Mesh(pillGeometry, pillMaterial);
-                
+
                 pill.position.set(
                     (Math.random() - 0.5) * 40,
                     (Math.random() - 0.5) * 30,
@@ -1480,7 +667,7 @@
             const scene = new THREE.Scene();
             const camera = new THREE.PerspectiveCamera(75, container.offsetWidth / container.offsetHeight, 0.1, 1000);
             const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-            
+
             renderer.setSize(container.offsetWidth, container.offsetHeight);
             renderer.setClearColor(0x000000, 0);
             container.appendChild(renderer.domElement);
@@ -1493,13 +680,13 @@
             const nodes = [];
             for (let i = 0; i < 4; i++) {
                 const nodeGeometry = new THREE.SphereGeometry(0.5, 16, 12);
-                const nodeMaterial = new THREE.MeshPhongMaterial({ 
+                const nodeMaterial = new THREE.MeshPhongMaterial({
                     color: 0x00d4aa,
                     transparent: true,
                     opacity: 0.8
                 });
                 const node = new THREE.Mesh(nodeGeometry, nodeMaterial);
-                
+
                 node.position.set(i * 4 - 6, 0, 0);
                 scene.add(node);
                 nodes.push(node);
@@ -1507,7 +694,7 @@
                 // Connect nodes with lines
                 if (i > 0) {
                     const lineGeometry = new THREE.BufferGeometry().setFromPoints([
-                        new THREE.Vector3((i-1) * 4 - 6, 0, 0),
+                        new THREE.Vector3((i - 1) * 4 - 6, 0, 0),
                         new THREE.Vector3(i * 4 - 6, 0, 0)
                     ]);
                     const lineMaterial = new THREE.LineBasicMaterial({ color: 0x00b894 });
@@ -1538,7 +725,7 @@
             const scene = new THREE.Scene();
             const camera = new THREE.PerspectiveCamera(75, container.offsetWidth / container.offsetHeight, 0.1, 1000);
             const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-            
+
             renderer.setSize(container.offsetWidth, container.offsetHeight);
             renderer.setClearColor(0x000000, 0);
             container.appendChild(renderer.domElement);
@@ -1551,10 +738,10 @@
             const charts = [];
             for (let i = 0; i < 6; i++) {
                 const chartGroup = new THREE.Group();
-                
+
                 // Chart background
                 const bgGeometry = new THREE.PlaneGeometry(2, 1.5);
-                const bgMaterial = new THREE.MeshPhongMaterial({ 
+                const bgMaterial = new THREE.MeshPhongMaterial({
                     color: 0x21262d,
                     transparent: true,
                     opacity: 0.7
@@ -1605,14 +792,14 @@
             const chatMessages = document.getElementById('chat-messages');
             const chatInputField = document.getElementById('chat-input-field');
             const sendMessage = document.getElementById('send-message');
-            
+
             if (!chatbotTrigger || !chatbotWindow) {
                 console.error('Chatbot elements not found in the DOM');
                 return;
             }
-            
+
             let isChatOpen = false;
-            
+
             // Medical claim terms for the AI to recognize
             const claimTerms = {
                 'deductible': 'The amount you pay for covered healthcare services before your insurance plan starts to pay.',
@@ -1628,45 +815,45 @@
                 'hsa': 'A Health Savings Account (HSA) is a tax-advantaged account for individuals with high-deductible health plans to save for medical expenses.',
                 'fsa': 'A Flexible Spending Account (FSA) is a special account where you put money that you can use to pay for certain out-of-pocket healthcare costs.'
             };
-            
+
             // Enhanced knowledge base for dark theme
             const knowledgeBase = {
                 'hello': 'Hi there! 🌟 How can I assist you with your medical claims today?',
-                'hi': 'Hello! I\'m your HealAi assistant. What can I help you with? 💚',
+                'hi': 'Hello! I\'m your सWASTHYA assistant. What can I help you with? 💚',
                 'hey': 'Hello there! How can I help with your medical claims? 🏥',
                 'help': 'I can help you with uploading documents, checking claim status, explaining medical terms, and navigating the insurance claim process. Just let me know what you need! ✨',
-                
+
                 'upload': 'To upload a document, click on the "Upload New Document" button on the homepage or in your dashboard. You can upload medical bills, insurance statements, doctor notes, and more. 📄',
                 'document': 'We support various document formats including PDF, JPG, PNG, and DOCX. Each document will be securely stored and processed by our AI system. 🔒',
                 'scan': 'You can scan documents using your phone camera or upload existing files from your computer or cloud storage. 📱',
-                
+
                 'status': 'I can check your claim status for you. Could you provide your claim reference number? In a real interaction, I would look this up in our secure database. 🔍',
                 'pending': 'Pending claims are still being processed. The average processing time is 5-7 business days. ⏳',
                 'approved': 'When a claim is approved, you will receive an email notification and the details will appear in your dashboard. ✅',
                 'denied': 'If your claim was denied, we can help you understand why and assist with the appeals process if needed. 📋',
                 'appeal': 'To appeal a denied claim, go to the claim details page and click "Start Appeal Process". Our system will guide you through the necessary steps. ⚖️',
-                
+
                 'summarize': 'Our Document Summarization feature extracts key information from lengthy medical reports and insurance policies, presenting the most important points in an easy-to-understand format. 📊',
                 'explain': 'The Term Explainer breaks down complex medical and insurance terminology into simple language. Just highlight any term you don\'t understand. 💡',
                 'generator': 'The Auto Document Generator creates professional appeal letters, request letters, and emails based on your specific situation and claim data. ✍️',
                 'chatbot': 'That\'s me! I\'m here to answer questions about your claims, help you navigate the platform, and explain medical or insurance terms. 🤖',
                 'dashboard': 'Your personalized dashboard shows all your claims in one place, with status indicators, important dates, and action items clearly marked. 📈',
-                
+
                 'account': 'You can manage your account settings by clicking on your profile icon in the top right corner of the dashboard. ⚙️',
                 'password': 'To change your password, go to Account Settings > Security > Change Password. 🔐',
-                'delete': 'If you wish to delete your account, please contact our support team at support@healai.com for assistance. 🗑️',
+                'delete': 'If you wish to delete your account, please contact our support team at support@सWASTHYA.com for assistance. 🗑️',
                 'privacy': 'We take privacy seriously. All your medical documents and personal information are encrypted and stored securely in compliance with HIPAA regulations. 🛡️',
-                
-                'contact': 'You can reach our support team at support@healai.com or call us at (555) 123-4567 during business hours (Mon-Fri, 9AM-5PM EST). 📞',
-                'human': 'If you would prefer to speak with a human representative, please call our support line at (555) 123-4567 or email support@healai.com. 👥',
+
+                'contact': 'You can reach our support team at support@सWASTHYA.com or call us at (555) 123-4567 during business hours (Mon-Fri, 9AM-5PM EST). 📞',
+                'human': 'If you would prefer to speak with a human representative, please call our support line at (555) 123-4567 or email support@सWASTHYA.com. 👥',
                 'hours': 'Our support team is available Monday through Friday, 9AM to 5PM Eastern Time. 🕘',
-                
+
                 'default': 'I\'m here to help with any questions about your medical claims, documents, or the claim process. Could you provide more details about what you need assistance with? 🤔'
             };
-            
+
             // Toggle chatbot window
             if (chatbotTrigger) {
-                chatbotTrigger.addEventListener('click', function() {
+                chatbotTrigger.addEventListener('click', function () {
                     if (isChatOpen) {
                         chatbotWindow.style.display = 'none';
                         isChatOpen = false;
@@ -1677,27 +864,27 @@
                     }
                 });
             }
-            
+
             if (closeChat) {
-                closeChat.addEventListener('click', function() {
+                closeChat.addEventListener('click', function () {
                     chatbotWindow.style.display = 'none';
                     isChatOpen = false;
                 });
             }
-            
+
             // Function to add a message to the chat
             function addMessageToChat(message, sender) {
                 if (!chatMessages) {
                     console.error('Chat messages container not found');
                     return;
                 }
-                
+
                 const messageDiv = document.createElement('div');
                 messageDiv.classList.add('message', sender === 'user' ? 'user-message' : 'bot-message');
-                
+
                 if (sender === 'bot') {
                     let messageText = message;
-                    
+
                     // Check if any terms in the knowledge base need to be linked
                     for (const [term, definition] of Object.entries(claimTerms)) {
                         const termRegex = new RegExp(`\\b${term}\\b`, 'gi');
@@ -1705,107 +892,107 @@
                             messageText = messageText.replace(termRegex, `<span class="term-highlight" title="${definition}">${term}</span>`);
                         }
                     }
-                    
+
                     messageDiv.innerHTML = messageText;
                 } else {
                     messageDiv.textContent = message;
                 }
-                
+
                 chatMessages.appendChild(messageDiv);
                 chatMessages.scrollTop = chatMessages.scrollHeight;
             }
-            
+
             // Function to process user input and generate response
             function processUserInput(userInput) {
                 const input = userInput.toLowerCase().trim();
-                
+
                 // First check if the user is asking about a medical term
                 for (const [term, definition] of Object.entries(claimTerms)) {
                     if (input.includes(term) || input.includes(`what is ${term}`) || input.includes(`explain ${term}`)) {
                         return `<strong>${term.charAt(0).toUpperCase() + term.slice(1)}:</strong> ${definition} 📚`;
                     }
                 }
-                
+
                 // Then check against our knowledge base
                 for (const [key, value] of Object.entries(knowledgeBase)) {
                     if (input.includes(key)) {
                         return value;
                     }
                 }
-                
+
                 return knowledgeBase.default;
             }
-            
+
             // Function to handle sending a message
             function sendUserMessage() {
                 if (!chatInputField || !chatMessages) {
                     console.error('Chat input or messages container not found');
                     return;
                 }
-                
+
                 const userInput = chatInputField.value.trim();
                 if (userInput === '') return;
-                
+
                 addMessageToChat(userInput, 'user');
                 chatInputField.value = '';
-                
+
                 // Show typing indicator
                 const typingDiv = document.createElement('div');
                 typingDiv.classList.add('message', 'bot-message');
                 typingDiv.innerHTML = '<div class="loading"></div> Typing...';
                 chatMessages.appendChild(typingDiv);
                 chatMessages.scrollTop = chatMessages.scrollHeight;
-                
+
                 setTimeout(() => {
                     chatMessages.removeChild(typingDiv);
                     const botResponse = processUserInput(userInput);
                     addMessageToChat(botResponse, 'bot');
-                    
+
                     // Enhanced interactions for dark theme
                     if (botResponse.toLowerCase().includes('upload')) {
                         setTimeout(() => {
                             addMessageToChat('Would you like to upload a document now? 📤', 'bot');
-                            
+
                             const quickReplies = document.createElement('div');
                             quickReplies.classList.add('quick-replies');
-                            
+
                             const yesButton = document.createElement('button');
                             yesButton.textContent = '✅ Yes, upload now';
-                            yesButton.addEventListener('click', function() {
+                            yesButton.addEventListener('click', function () {
                                 addMessageToChat('Yes, upload now', 'user');
                                 setTimeout(() => {
                                     addMessageToChat('Great! Redirecting you to the document upload page... 🚀', 'bot');
                                     window.location.href = 'upload2.html';
                                 }, 1000);
                             });
-                            
+
                             const noButton = document.createElement('button');
                             noButton.textContent = '❌ Not now';
-                            noButton.addEventListener('click', function() {
+                            noButton.addEventListener('click', function () {
                                 addMessageToChat('Not now', 'user');
                                 setTimeout(() => {
                                     addMessageToChat('No problem. Is there anything else I can help you with? 😊', 'bot');
                                 }, 1000);
                             });
-                            
+
                             quickReplies.appendChild(yesButton);
                             quickReplies.appendChild(noButton);
                             chatMessages.appendChild(quickReplies);
                             chatMessages.scrollTop = chatMessages.scrollHeight;
                         }, 1000);
                     }
-                    
+
                     // Handle claim status queries
                     if (userInput.match(/^CLM\d{6}$/i)) {
                         setTimeout(() => {
                             addMessageToChat(`<strong>Claim ${userInput} Status:</strong> 🔄 In Processing<br>📅 Submitted: April 5, 2025<br>⏰ Estimated Completion: April 12, 2025<br><br>Would you like to see more details? 📋`, 'bot');
-                            
+
                             const quickReplies = document.createElement('div');
                             quickReplies.classList.add('quick-replies');
-                            
+
                             const detailsButton = document.createElement('button');
                             detailsButton.textContent = '📊 Show details';
-                            detailsButton.addEventListener('click', function() {
+                            detailsButton.addEventListener('click', function () {
                                 addMessageToChat('Show details', 'user');
                                 setTimeout(() => {
                                     addMessageToChat(`<strong>📋 Claim Details for ${userInput}</strong><br>
@@ -1818,16 +1005,16 @@
                                     <br><br>📌 Next Steps: Once the review is complete, the claim will move to payment processing if approved.`, 'bot');
                                 }, 1000);
                             });
-                            
+
                             const trackButton = document.createElement('button');
                             trackButton.textContent = '🔔 Track updates';
-                            trackButton.addEventListener('click', function() {
+                            trackButton.addEventListener('click', function () {
                                 addMessageToChat('Track updates', 'user');
                                 setTimeout(() => {
                                     addMessageToChat('You\'ll now receive email notifications about any status changes for this claim. You can manage notification preferences in your account settings. 📧✨', 'bot');
                                 }, 1000);
                             });
-                            
+
                             quickReplies.appendChild(detailsButton);
                             quickReplies.appendChild(trackButton);
                             chatMessages.appendChild(quickReplies);
@@ -1836,26 +1023,26 @@
                     }
                 }, 800);
             }
-            
+
             // Send message on button click
             if (sendMessage) {
                 sendMessage.addEventListener('click', sendUserMessage);
             }
-            
+
             // Send message on Enter key
             if (chatInputField) {
-                chatInputField.addEventListener('keypress', function(e) {
+                chatInputField.addEventListener('keypress', function (e) {
                     if (e.key === 'Enter') {
                         sendUserMessage();
                     }
                 });
             }
-            
+
             // Initialize with welcome message
             if (chatMessages) {
                 setTimeout(() => {
-                    addMessageToChat("Hello! I'm your HealAi assistant. How can I help you with your medical claims today? 🌟", 'bot');
-                    
+                    addMessageToChat("Hello! I'm your सWASTHYA assistant. How can I help you with your medical claims today? 🌟", 'bot');
+
                     setTimeout(() => {
                         addMessageToChat("You can ask me about uploading documents, checking claim status, or explaining medical terms. 💚", 'bot');
                     }, 1000);
@@ -1866,12 +1053,12 @@
         // Smooth scrolling functionality
         function initSmoothScrolling() {
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function(e) {
+                anchor.addEventListener('click', function (e) {
                     e.preventDefault();
-                    
+
                     const targetId = this.getAttribute('href');
                     if (targetId === '#') return;
-                    
+
                     const targetElement = document.querySelector(targetId);
                     if (targetElement) {
                         window.scrollTo({
@@ -1889,7 +1076,7 @@
                 threshold: 0.1,
                 rootMargin: '0px 0px -50px 0px'
             };
-            
+
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
@@ -1898,21 +1085,21 @@
                     }
                 });
             }, observerOptions);
-            
+
             const elements = document.querySelectorAll('.feature-card, .step, .testimonial-card');
             elements.forEach(el => {
                 observer.observe(el);
             });
-            
+
             // Enhanced hover effects for dark theme
             const featureCards = document.querySelectorAll('.feature-card');
             featureCards.forEach(card => {
-                card.addEventListener('mouseenter', function() {
+                card.addEventListener('mouseenter', function () {
                     this.style.transform = 'translateY(-12px) scale(1.02)';
                     this.style.boxShadow = '0 25px 50px rgba(0, 212, 170, 0.3)';
                 });
-                
-                card.addEventListener('mouseleave', function() {
+
+                card.addEventListener('mouseleave', function () {
                     this.style.transform = 'translateY(-8px) scale(1)';
                     this.style.boxShadow = '0 20px 40px rgba(0, 212, 170, 0.2)';
                 });
@@ -1924,14 +1111,14 @@
             // Add enhanced click effects for dark theme
             const buttons = document.querySelectorAll('.btn');
             buttons.forEach(button => {
-                button.addEventListener('click', function(e) {
+                button.addEventListener('click', function (e) {
                     // Create ripple effect
                     const ripple = document.createElement('span');
                     const rect = this.getBoundingClientRect();
                     const size = Math.max(rect.width, rect.height);
                     const x = e.clientX - rect.left - size / 2;
                     const y = e.clientY - rect.top - size / 2;
-                    
+
                     ripple.style.cssText = `
                         position: absolute;
                         width: ${size}px;
@@ -1944,15 +1131,15 @@
                         animation: ripple 0.6s linear;
                         pointer-events: none;
                     `;
-                    
+
                     this.appendChild(ripple);
-                    
+
                     setTimeout(() => {
                         ripple.remove();
                     }, 600);
                 });
             });
-            
+
             // Add ripple animation
             const style = document.createElement('style');
             style.textContent = `
@@ -1967,4 +1154,5 @@
         }
     </script>
 </body>
+
 </html>
